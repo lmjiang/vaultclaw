@@ -2,7 +2,7 @@
 
 MCP (Model Context Protocol) tool server for [VaultClaw](https://github.com/lmjiang/vaultclaw) credential manager.
 
-Exposes VaultClaw credential operations as MCP tools that any MCP-compatible AI agent can call — including Claude Desktop, OpenClaw, Cursor, and Windsurf.
+Exposes VaultClaw credential operations as MCP tools that any MCP-compatible AI agent can call — including Codex, Claude Desktop, OpenClaw, Cursor, and Windsurf.
 
 ## Tools
 
@@ -60,6 +60,26 @@ Or if installed globally:
   }
 }
 ```
+
+## Codex (OpenAI)
+
+Add to your Codex agent's MCP config or `codex.json`:
+
+```json
+{
+  "mcpServers": {
+    "vaultclaw": {
+      "command": "npx",
+      "args": ["@vaultclaw/mcp"],
+      "env": {
+        "VAULTCLAW_TOKEN": "your-jwt-token"
+      }
+    }
+  }
+}
+```
+
+This gives Codex agents secure, scoped credential access — no more plaintext API keys in `.env` files or agent prompts.
 
 ## OpenClaw
 

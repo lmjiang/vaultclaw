@@ -5,7 +5,7 @@ description: >
   credential vault. Use this skill whenever an AI agent needs API keys, tokens, passwords,
   or other secrets. Credentials are never exposed in plaintext in the agent's context window.
   Supports scoped access with TTL, human-in-the-loop approval, audit logging, and instant
-  revocation. Works with any LLM-powered agent (Claude Code, OpenClaw, Codex, Cline, etc.).
+  revocation. Works with any LLM-powered agent (Codex, Claude Code, OpenClaw, Cline, etc.).
 version: 1.0.0
 metadata:
   openclaw:

@@ -16,7 +16,7 @@ Human: "Post this thread to my X account"
 
 ## The Problem
 
-AI agents (OpenClaw, Claude Code, Codex, custom agents) are becoming capable enough to act on our behalf — posting to social media, managing cloud resources, filing PRs, paying bills. But there's a fundamental security gap: **how does a human safely lend their digital identity to an AI?**
+AI agents (Codex, Claude Code, OpenClaw, custom agents) are becoming capable enough to act on our behalf — posting to social media, managing cloud resources, filing PRs, paying bills. But there's a fundamental security gap: **how does a human safely lend their digital identity to an AI?**
 
 Today's reality:
 - **Plaintext secrets everywhere** — `.env` files, config files, agent context windows
@@ -126,7 +126,7 @@ vaultclaw run --redact-output -- <cmd>
 vaultclaw scan <path> --fix
 ```
 
-## MCP Server (Claude Desktop, Cursor, OpenClaw, Windsurf)
+## MCP Server (Codex, Claude Desktop, OpenClaw, Cursor, Windsurf)
 
 The MCP server exposes VaultClaw as tools that any MCP-compatible AI agent can call directly.
 
@@ -138,7 +138,7 @@ cd mcp && npm install && npm run build
 
 ### Configure
 
-Add to your MCP client config (e.g. Claude Desktop, OpenClaw, Cursor):
+Add to your MCP client config (e.g. Codex, Claude Desktop, OpenClaw, Cursor):
 
 ```json
 {
@@ -373,7 +373,7 @@ cargo clippy -- -D warnings
 
 ## Why This Matters for AI Agents
 
-Every AI coding agent (OpenClaw, Claude Code, Codex, Cline, etc.) needs access to credentials — API keys, tokens, SSH keys. Today, these secrets are typically:
+Every AI coding agent (Codex, Claude Code, OpenClaw, Cline, etc.) needs access to credentials — API keys, tokens, SSH keys. Today, these secrets are typically:
 
 1. Stored in plaintext `.env` files
 2. Pasted directly into agent prompts
