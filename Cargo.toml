@@ -1,0 +1,112 @@
+[package]
+name = "vaultclaw"
+version = "0.1.0"
+edition = "2021"
+description = "Local-first, AI-native credential manager"
+license = "MIT"
+
+[[bin]]
+name = "vaultclaw"
+path = "src/main.rs"
+
+[lib]
+name = "vaultclaw"
+path = "src/lib.rs"
+
+[features]
+default = ["full"]
+full = ["webdav", "web-ui"]
+minimal = []
+webdav = []
+web-ui = []
+yubikey = ["ctap-hid-fido2"]
+
+[dependencies]
+# Crypto
+argon2 = "0.5"
+chacha20poly1305 = "0.10"
+rand = "0.8"
+zeroize = { version = "1", features = ["derive"] }
+secrecy = { version = "0.8", features = ["serde"] }
+sha1 = "0.10"
+sha2 = "0.10"
+hmac = "0.12"
+hkdf = "0.12"
+unicode-normalization = "0.1"
+subtle = "2"
+
+# Passkey / WebAuthn
+p256 = { version = "0.13", features = ["ecdsa", "pem"] }
+ed25519-dalek = { version = "2", features = ["rand_core"] }
+coset = "0.3"
+ciborium = "0.2"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rmp-serde = "1"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+clap_complete = "4"
+clap_mangen = "0.2"
+rpassword = "5"
+
+# TOTP
+totp-rs = { version = "5", features = ["otpauth"] }
+
+# Async / Daemon / HTTP
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "blocking"] }
+axum = "0.7"
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.5", features = ["cors", "trace", "fs"] }
+jsonwebtoken = "9"
+
+# Utilities
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+anyhow = "1"
+base32 = "0.5"
+base64 = "0.22"
+hex = "0.4"
+dirs = "5"
+fs2 = "0.4"
+fuzzy-matcher = "0.3"
+copypasta = "0.10"
+csv = "1"
+url = { version = "2", features = ["serde"] }
+zxcvbn = "3"
+regex = "1"
+aho-corasick = "1"
+toml = "0.8"
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# YubiKey FIDO2 (optional)
+ctap-hid-fido2 = { version = "3.5", optional = true }
+
+# macOS platform (Keychain, Touch ID)
+[target.'cfg(target_os = "macos")'.dependencies]
+security-framework = "3"
+security-framework-sys = { version = "2", features = ["OSX_10_13"] }
+core-foundation = "0.10"
+core-foundation-sys = "0.8"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+
+[dev-dependencies]
+tempfile = "3"
+assert_cmd = "2"
+predicates = "3"
+filetime = "0.2"
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "vault_ops"
+harness = false

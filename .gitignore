@@ -1,0 +1,15 @@
+/target
+.DS_Store
+design/
+*.vclaw
+*.vclaw.tmp
+*.vclaw.lock
+.env
+*.pem
+*.key
+web/node_modules/
+web/dist/
+web/*.tsbuildinfo
+extension/node_modules/
+extension/dist/
+extension/*.tsbuildinfo
