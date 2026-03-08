@@ -16,7 +16,7 @@ Human: "Post this thread to my X account"
 
 ## The Problem
 
-AI agents (OpenClaw, Claude Code, Codex, custom agents) are becoming capable enough to act on our behalf — posting to social media, managing cloud resources, filing PRs, paying bills. But there's a fundamental security gap: **how does a human safely lend their digital identity to an AI?**
+AI agents (Codex, Claude Code, OpenClaw, custom agents) are becoming capable enough to act on our behalf — posting to social media, managing cloud resources, filing PRs, paying bills. But there's a fundamental security gap: **how does a human safely lend their digital identity to an AI?**
 
 Today's reality:
 - **Plaintext secrets everywhere** — `.env` files, config files, agent context windows
@@ -48,6 +48,7 @@ VaultClaw solves this with **credential leasing** — time-limited, scope-limite
 - **HIBP breach checking** — k-anonymity API, no plaintext sent
 - **YubiKey FIDO2** — passwordless unlock via hmac-secret
 - **Import from 1Password** — .1pif and CSV import
+- **MCP server** — Model Context Protocol server for Claude Desktop, Cursor, Windsurf, and any MCP client
 - **Single binary** — Rust daemon with CLI and HTTP API
 
 ## Quick Start
@@ -124,6 +125,45 @@ vaultclaw run --redact-output -- <cmd>
 # Replace plaintext secrets in config files with vclaw:// references
 vaultclaw scan <path> --fix
 ```
+
+## MCP Server (Codex, Claude Desktop, OpenClaw, Cursor, Windsurf)
+
+The MCP server exposes VaultClaw as tools that any MCP-compatible AI agent can call directly.
+
+### Install
+
+```bash
+cd mcp && npm install && npm run build
+```
+
+### Configure
+
+Add to your MCP client config (e.g. Codex, Claude Desktop, OpenClaw, Cursor):
+
+```json
+{
+  "mcpServers": {
+    "vaultclaw": {
+      "command": "npx",
+      "args": ["@vaultclaw/mcp"],
+      "env": {
+        "VAULTCLAW_TOKEN": "your-jwt-token"
+      }
+    }
+  }
+}
+```
+
+### Available MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `vaultclaw_resolve` | Resolve `vclaw://` credential references to secret values |
+| `vaultclaw_list` | List vault entries (titles/metadata only, no secrets) |
+| `vaultclaw_lease` | Create a time-limited credential lease with TTL |
+| `vaultclaw_revoke` | Revoke a lease by ID, or revoke all active leases |
+
+See [`mcp/README.md`](mcp/README.md) for full configuration details.
 
 ## CLI Reference
 
@@ -243,7 +283,12 @@ Rust Daemon (single binary, localhost HTTP)
 │   ├── /v1/lease      — credential leasing
 │   └── /v1/export     — vault export
 ├── CLI (clap, talks to daemon via HTTP)
-└── YubiKey FIDO2 hmac-secret unlock
+├── YubiKey FIDO2 hmac-secret unlock
+└── MCP Server (@vaultclaw/mcp, TypeScript)
+    ├── vaultclaw_resolve — resolve vclaw:// references
+    ├── vaultclaw_list    — list vault entries (no secrets)
+    ├── vaultclaw_lease   — create time-limited lease
+    └── vaultclaw_revoke  — revoke leases
 ```
 
 ### Security Model
@@ -276,6 +321,11 @@ cargo build --release --no-default-features
 cargo build --release --features yubikey
 ```
 
+```bash
+# MCP server
+cd mcp && npm install && npm run build
+```
+
 ### Feature Flags
 
 | Feature | Default | Description |
@@ -296,6 +346,9 @@ cargo test --test integration
 
 # Benchmarks
 cargo bench --bench vault_ops
+
+# MCP server tests (22 tests)
+cd mcp && npm test
 
 # Clippy
 cargo clippy -- -D warnings
@@ -320,7 +373,7 @@ cargo clippy -- -D warnings
 
 ## Why This Matters for AI Agents
 
-Every AI coding agent (OpenClaw, Claude Code, Codex, Cline, etc.) needs access to credentials — API keys, tokens, SSH keys. Today, these secrets are typically:
+Every AI coding agent (Codex, Claude Code, OpenClaw, Cline, etc.) needs access to credentials — API keys, tokens, SSH keys. Today, these secrets are typically:
 
 1. Stored in plaintext `.env` files
 2. Pasted directly into agent prompts

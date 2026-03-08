@@ -1,0 +1,37 @@
+{
+  "name": "@vaultclaw/mcp",
+  "version": "0.1.0",
+  "description": "MCP tool server for VaultClaw credential manager",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "vaultclaw-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/__tests__/server.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "vaultclaw",
+    "mcp",
+    "credentials",
+    "ai-agents",
+    "model-context-protocol"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.3.0"
+  }
+}
